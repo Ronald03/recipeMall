@@ -1,5 +1,3 @@
-/* Require express, dotenv, morgan */
-//const express = require("express");
 import express from "express";
 import Mongoose from "mongoose";
 import session from "express-session";
@@ -15,16 +13,8 @@ import Scheduler from "./config/scheduler.js";
 import myPassport from "./config/passport.js";
 import { authRouter } from "./routes/auth.js";
 import { pantryRouter } from "./routes/addIngredients.js";
-//const Mongoose = require("mongoose");
-//const session = require("express-session");
-//const passport = require("passport");
-//const dotenv = require("dotenv");
-//const morgan = require("morgan");
-//const cors = require("cors");
-//const MongoStore = require("connect-mongo")(session);
-//const connectDB = require("./config/db");
-//const { ensureAuth, ensureGuest } = require("./middleware/auth.js");
-//const Schedule = require("./config/scheduler");
+import { ToadScheduler, SimpleIntervalJob, Task } from "toad-scheduler";
+import { randomRecipes } from "./config/serverApiCalls.js";
 
 /* add Local variables */
 dotenv.config({ path: "./config/config.env" });
@@ -49,8 +39,25 @@ connectDB();
 /* Setting a scheduled task */
 //require("./config/scheduler.js")();
 //Schedule();
+/* async () => {
+  const obj = await randomRecipes();
+  console.log(obj);
+}; */
 
-/* Get Morgan middleware t800-375-5283.== "development") {
+const scheduler = new ToadScheduler();
+
+const task = new Task("simple task", () => {
+  const fetchRandom = async () => {
+    const obj = await randomRecipes();
+    console.log(obj);
+  };
+  fetchRandom();
+});
+const job = new SimpleIntervalJob({ seconds: 10 }, task);
+
+scheduler.addSimpleIntervalJob(job);
+
+/* Get Morgan middleware === "development") {
   app.use(morgan("dev"));
 }
 
@@ -72,6 +79,7 @@ app.use(passport.session());
 //app.use("/auth", require("./routes/auth.js"));
 app.use("/auth", authRouter);
 app.use("/dash", pantryRouter);
+
 //app.use("/dash", require("./routes/addIngredients.js"));
 
 /* Get server to listen on specified Port */

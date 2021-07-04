@@ -2,19 +2,22 @@ import axios from "axios";
 
 export const randomRecipes = () => {
   const options = {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": process.env.RAPIDAPI_KEY,
+      "x-rapidapi-host": process.env.RAPIDAPI_HOST,
+    },
     url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random",
     params: { number: "3" },
   };
 
-  const result = axios
-    .request(options)
-    .then(function (response) {
+  const result = axios(options)
+    .then((response) => {
+      //console.log(response.data.recipes);
       return response.data.recipes;
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.error(error);
     });
   return result;
 };
-
-//module.exports = () => randomRecipes();
