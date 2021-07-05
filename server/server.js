@@ -9,12 +9,12 @@ import MongoSt from "connect-mongo";
 const MongoStore = MongoSt(session);
 import connectDB from "./config/db.js";
 import { ensureAuth, ensureGuest } from "./middleware/auth.js";
-import Scheduler from "./config/scheduler.js";
 import myPassport from "./config/passport.js";
 import { authRouter } from "./routes/auth.js";
 import { pantryRouter } from "./routes/addIngredients.js";
 import { ToadScheduler, SimpleIntervalJob, Task } from "toad-scheduler";
 import { randomRecipes } from "./config/serverApiCalls.js";
+import randomRecipeModel, { recordSpecifics } from "./models/RandomRecipes.js";
 
 /* add Local variables */
 dotenv.config({ path: "./config/config.env" });
@@ -36,26 +36,20 @@ app.use(cors());
 /* connect with Database */
 connectDB();
 
-/* Setting a scheduled task */
-//require("./config/scheduler.js")();
-//Schedule();
-/* async () => {
-  const obj = await randomRecipes();
-  console.log(obj);
-}; */
-
+/* Schedule an API call to get random recipes every 24hrs */
 const scheduler = new ToadScheduler();
 
 const task = new Task("simple task", () => {
   const fetchRandom = async () => {
     const obj = await randomRecipes();
-    console.log(obj);
+    obj.map((recipe) => {
+      randomRecipeModel.create(recordSpecifics(recipe));
+    });
   };
   fetchRandom();
 });
-const job = new SimpleIntervalJob({ seconds: 10 }, task);
 
-scheduler.addSimpleIntervalJob(job);
+scheduler.addSimpleIntervalJob(new SimpleIntervalJob({ hours: 23 }, task));
 
 /* Get Morgan middleware === "development") {
   app.use(morgan("dev"));

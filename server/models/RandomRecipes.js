@@ -1,12 +1,39 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+
+export const recordSpecifics = (recipe) => {
+  const x = {
+    recipeId: recipe.id,
+    analyzedInstructions: recipe.analyzedInstructions,
+    cuisines: recipe.cuisines,
+    dairyFree: recipe.dairyFree,
+    diets: recipe.diets,
+    dishTypes: recipe.dishTypes,
+    extendedIngredients: recipe.extendedIngredients,
+    glutenFree: recipe.glutenFree,
+    healthScore: recipe.healthScore,
+    image: recipe.image,
+    occasions: recipe.occasions,
+    readyInMinutes: recipe.readyInMinutes,
+    servings: recipe.servings,
+    sourceName: recipe.sourceName,
+    sourceUrl: recipe.sourceUrl,
+    summary: recipe.summary,
+    title: recipe.title,
+    vegan: recipe.vegan,
+    vegetarian: recipe.vegetarian,
+    veryHealthy: recipe.veryHealthy,
+    weightWatcherSmartPoints: recipe.weightWatcherSmartPoints,
+  };
+  return x;
+};
 
 const randomRecipesSchema = new mongoose.Schema({
-  id: {
+  recipeId: {
     type: Number,
     required: true,
   },
   analyzedInstructions: {
-    type: Array,
+    type: [],
     required: true,
   },
   cuisines: {
@@ -74,4 +101,4 @@ const randomRecipesSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("randomRecipes", randomRecipesSchema);
+export default mongoose.model("randomRecipes", randomRecipesSchema);

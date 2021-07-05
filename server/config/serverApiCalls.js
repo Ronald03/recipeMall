@@ -8,7 +8,7 @@ export const randomRecipes = () => {
       "x-rapidapi-host": process.env.RAPIDAPI_HOST,
     },
     url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random",
-    params: { number: "3" },
+    params: { number: "10" },
   };
 
   const result = axios(options)
