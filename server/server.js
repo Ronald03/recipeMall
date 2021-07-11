@@ -8,7 +8,6 @@ import cors from "cors";
 import MongoSt from "connect-mongo";
 const MongoStore = MongoSt(session);
 import connectDB from "./config/db.js";
-import connDB from "./config/dbConn.js";
 import myPassport from "./config/passport.js";
 import { authRouter } from "./routes/auth.js";
 import { apiCallsRoute } from "./routes/dbCalls.js";

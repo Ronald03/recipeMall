@@ -1,14 +1,14 @@
 import express from "express";
 import Pantry from "../models/Pantry.js";
 import randomRecipeModel from "../models/RandomRecipes.js";
-import User from "../models/Users.js";
 
 const router = express.Router();
 
-router.get("/toTest", async (req, res) => {
+router.get("/getRandom", async (req, res) => {
   try {
-    let result = await randomRecipeModel.findOne({ recipeId: 664270 }).exec();
+    let result = await randomRecipeModel.aggregate([{ $sample: { size: 3 } }]);
     if (result) console.log(result);
+    res.send(result);
   } catch (err) {
     console.log(err);
   }
