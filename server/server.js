@@ -8,10 +8,10 @@ import cors from "cors";
 import MongoSt from "connect-mongo";
 const MongoStore = MongoSt(session);
 import connectDB from "./config/db.js";
-import { ensureAuth, ensureGuest } from "./middleware/auth.js";
+import connDB from "./config/dbConn.js";
 import myPassport from "./config/passport.js";
 import { authRouter } from "./routes/auth.js";
-import { pantryRouter } from "./routes/addIngredients.js";
+import { apiCallsRoute } from "./routes/dbCalls.js";
 import { ToadScheduler, SimpleIntervalJob, Task } from "toad-scheduler";
 import { randomRecipes } from "./config/serverApiCalls.js";
 import randomRecipeModel, { recordSpecifics } from "./models/RandomRecipes.js";
@@ -53,7 +53,7 @@ scheduler.addSimpleIntervalJob(new SimpleIntervalJob({ hours: 23 }, task));
 
 /* Get Morgan middleware === "development") {
   app.use(morgan("dev"));
-}
+} */
 
 /* Session middleware */
 app.use(
@@ -72,7 +72,7 @@ app.use(passport.session());
 /* Add routes */
 //app.use("/auth", require("./routes/auth.js"));
 app.use("/auth", authRouter);
-app.use("/dash", pantryRouter);
+app.use("/db", apiCallsRoute);
 
 //app.use("/dash", require("./routes/addIngredients.js"));
 

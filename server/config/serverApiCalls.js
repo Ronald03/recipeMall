@@ -13,7 +13,6 @@ export const randomRecipes = () => {
 
   const result = axios(options)
     .then((response) => {
-      //console.log(response.data.recipes);
       return response.data.recipes;
     })
     .catch((error) => {
