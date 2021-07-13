@@ -1,10 +1,17 @@
 import Typography from "@material-ui/core/Typography";
+import CachedIcon from "@material-ui/icons/Cached";
 import { useContext, useEffect, useState } from "react";
-import { randomRecipes } from "./apiCalls";
 import RecipeCard from "./RecipeCard";
 import { useStateValue } from "./StateProvider";
 
 const style = {
+  refreshList: {
+    cursor: "pointer",
+  },
+  sectionHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
   setCenter: {
     display: "flex",
     justifyContent: "center",
@@ -29,16 +36,20 @@ function Home(props) {
   const [{ users }, dispatch] = useStateValue();
 
   const [listOfRecipes, setListOfRecipes] = useState({
-    results: [],
+    list: [],
   });
 
+  const fetchRandomRecipes = () => {
+    fetch("http://localhost:5000/db/getRandom")
+      .then((response) => response.json())
+      .then((recipeList) => {
+        setListOfRecipes({ list: recipeList });
+      });
+  };
+
   useEffect(() => {
-    const fetchRandom = async () => {
-      const obj = await randomRecipes();
-      console.log(obj);
-      setListOfRecipes({ results: obj });
-    };
-    fetchRandom();
+    // Fetch random recipes from server
+    fetchRandomRecipes();
   }, []);
 
   return (
@@ -48,12 +59,18 @@ function Home(props) {
         style={(style.setCenter, style.rowContainer)}
       >
         <div className="row--randomrecipes" style={style.fullWidth}>
-          <Typography variant="h5" component="h4">
-            Random
-          </Typography>
+          <div style={style.sectionHeader}>
+            <Typography variant="h5" component="h4">
+              Random
+            </Typography>
+            <div style={style.refreshList}>
+              <CachedIcon onClick={fetchRandomRecipes} />
+            </div>
+          </div>
+
           <div style={style.recipeCardHolder}>
-            {listOfRecipes.results.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
+            {listOfRecipes.list.map((recipe) => (
+              <RecipeCard key={recipe.recipeId} recipe={recipe} />
             ))}
           </div>
         </div>
