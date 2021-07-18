@@ -14,6 +14,8 @@ import { apiCallsRoute } from "./routes/dbCalls.js";
 import { ToadScheduler, SimpleIntervalJob, Task } from "toad-scheduler";
 import { randomRecipes } from "./config/serverApiCalls.js";
 import randomRecipeModel, { recordSpecifics } from "./models/RandomRecipes.js";
+import Products from "./models/Products.js";
+import { capitalize } from "./utilities.js";
 
 /* add Local variables */
 dotenv.config({ path: "./config/config.env" });
@@ -38,17 +40,43 @@ connectDB();
 /* Schedule an API call to get random recipes every 24hrs */
 const scheduler = new ToadScheduler();
 
-const task = new Task("simple task", () => {
+const task = new Task("Get Random recipes", () => {
   const fetchRandom = async () => {
-    const obj = await randomRecipes();
-    obj.map((recipe) => {
-      randomRecipeModel.create(recordSpecifics(recipe));
-    });
+    try {
+      let storeIngredientList: object[] = [];
+      let storeRecipeId: object[] = [];
+      let storeIngAndId: object[] = [];
+      let ingName: String;
+
+      const objList = await randomRecipes();
+      objList.forEach((recipe) => {
+        recipe.analyzedInstructions[0].steps.forEach((step) => {
+          step.ingredients.forEach((ingredient) => {
+            if (!storeRecipeId.includes(ingredient.id) && ingredient.id !== 0) {
+              ingName = capitalize(ingredient.name);
+              storeRecipeId.push(ingredient.id);
+              storeIngAndId.push([ingName, ingredient.id]);
+              storeIngredientList.push(ingName);
+
+              Products.create({
+                _id: ingredient.id,
+                name: ingName,
+              });
+            }
+          });
+        });
+        recipe["ingredientList"] = storeIngredientList;
+        randomRecipeModel.create(recordSpecifics(recipe));
+      });
+    } catch (err) {
+      console.log("Error generated on Server Scheduled Task...");
+      console.error(err);
+    }
   };
   fetchRandom();
 });
 
-scheduler.addSimpleIntervalJob(new SimpleIntervalJob({ hours: 23 }, task));
+scheduler.addSimpleIntervalJob(new SimpleIntervalJob({ seconds: 25 }, task));
 
 /* Get Morgan middleware === "development") {
   app.use(morgan("dev"));

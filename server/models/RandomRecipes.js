@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const recordSpecifics = (recipe) => {
   const x = {
-    recipeId: recipe.id,
+    _id: recipe.id,
     analyzedInstructions: recipe.analyzedInstructions,
     cuisines: recipe.cuisines,
     dairyFree: recipe.dairyFree,
@@ -23,12 +23,13 @@ export const recordSpecifics = (recipe) => {
     vegetarian: recipe.vegetarian,
     veryHealthy: recipe.veryHealthy,
     weightWatcherSmartPoints: recipe.weightWatcherSmartPoints,
+    ingredientList: recipe.ingredientList,
   };
   return x;
 };
 
 const randomRecipesSchema = new mongoose.Schema({
-  recipeId: {
+  _id: {
     type: Number,
     required: true,
   },
@@ -94,6 +95,9 @@ const randomRecipesSchema = new mongoose.Schema({
   },
   weightWatcherSmartPoints: {
     type: Number,
+  },
+  ingredientList: {
+    type: Array,
   },
   createdAt: {
     type: Date,
