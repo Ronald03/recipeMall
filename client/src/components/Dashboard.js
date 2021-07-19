@@ -1,15 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import Pantry from "./Pantry";
 import PantryAddModal from "./PantryAddModal.js";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const style = {
   mainContainer: {
-    width: "100%",
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  subContainer: {
     width: "50%",
     height: 400,
   },

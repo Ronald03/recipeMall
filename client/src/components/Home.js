@@ -1,6 +1,6 @@
 import Typography from "@material-ui/core/Typography";
 import CachedIcon from "@material-ui/icons/Cached";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeCard from "./RecipeCard";
 import { useStateValue } from "./StateProvider";
 
@@ -33,7 +33,7 @@ const style = {
 };
 
 function Home(props) {
-  const [{ users }, dispatch] = useStateValue();
+  //const [{ users }, dispatch] = useStateValue();
 
   const [listOfRecipes, setListOfRecipes] = useState({
     list: [],

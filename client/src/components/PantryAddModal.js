@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
-import FormControl from "@material-ui/core/FormControl";
+import { FormControl, FormGroup } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 import Select from "@material-ui/core/Select";
@@ -11,7 +11,7 @@ import { green, red } from "@material-ui/core/colors";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 
-import axios from "axios";
+//import axios from "axios";
 import { UNITS } from "./constant.js";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function PantryAddModal(props) {
+function PantryAddModal({ open, onChange }) {
   const [inputList, setInputList] = useState([
     { item: "", Quantity: "", Unit: "" },
     { item: "", Quantity: "", Unit: "" },
@@ -40,12 +40,11 @@ function PantryAddModal(props) {
     { item: "", Quantity: "", Unit: "" },
   ]);
 
-  let inputKey = 0;
-
   const classes = useStyles();
 
   const handleChange = () => {
-    props.onChange(false);
+    //props.onChange(false);
+    onChange(false);
   };
 
   const handleAddClick = () => {
@@ -79,7 +78,7 @@ function PantryAddModal(props) {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={props.open}
+        open={open}
         onClose={handleChange}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -87,37 +86,43 @@ function PantryAddModal(props) {
           timeout: 500,
         }}
       >
-        <Fade in={props.open}>
+        <Fade in={open}>
           <div className={classes.paper}>
             <h2 id="transition-modal-title">Add Ingredients</h2>
-            <FormControl className={classes.formControl}>
+            <FormGroup className={classes.formControl}>
               {inputList.map((iField, index) => (
                 <div>
-                  <Input
-                    type="text"
-                    placeholder="Ingredient Name"
-                    name="item"
-                    value={iField.item}
-                    onChange={(e) => handleInputChange(e, index)}
-                  />
-                  <Input
-                    placeholder="Quantity"
-                    type="number"
-                    name="Quantity"
-                    value={iField.Quantity}
-                    onChange={(e) => handleInputChange(e, index)}
-                  />
-                  <Select
-                    name="Unit"
-                    value={iField.Unit}
-                    onChange={(e) => handleInputChange(e, index)}
-                    labelId="fotSelect"
-                    style={{ width: "70px" }}
-                  >
-                    {UNITS.map((unit) => (
-                      <MenuItem value={unit}>{unit}</MenuItem>
-                    ))}
-                  </Select>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Ingredient Name"
+                      name="item"
+                      value={iField.item}
+                      onChange={(e) => handleInputChange(e, index)}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <Input
+                      placeholder="Quantity"
+                      type="number"
+                      name="Quantity"
+                      value={iField.Quantity}
+                      onChange={(e) => handleInputChange(e, index)}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <Select
+                      name="Unit"
+                      value={iField.Unit}
+                      onChange={(e) => handleInputChange(e, index)}
+                      labelId="fotSelect"
+                      style={{ width: "70px" }}
+                    >
+                      {UNITS.map((unit) => (
+                        <MenuItem value={unit}>{unit}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                   {inputList.length !== 1 && (
                     <RemoveCircleIcon
                       onClick={() => handleRemoveClick(index)}
@@ -130,11 +135,10 @@ function PantryAddModal(props) {
                       style={{ color: green[500] }}
                     />
                   )}
-                  }
                 </div>
               ))}
               <button onClick={handleClick}>Add to Pantry</button>
-            </FormControl>
+            </FormGroup>
           </div>
         </Fade>
       </Modal>
