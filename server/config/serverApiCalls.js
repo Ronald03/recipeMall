@@ -10,7 +10,7 @@ export const randomRecipes = () => {
       "x-rapidapi-host": process.env.RAPIDAPI_HOST,
     },
     url: "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random",
-    params: { number: "1" }, //request 10 recipes per call
+    params: { number: "15" }, //request 15 recipes per call
   };
 
   const result = axios(options)
@@ -18,7 +18,9 @@ export const randomRecipes = () => {
       return response.data.recipes;
     })
     .catch((error) => {
-      console.error(error);
+      console.log(`This error was generated in serverApiCalls`);
+      console.log(error.name);
+      console.log(error.message);
     });
   return result;
 };

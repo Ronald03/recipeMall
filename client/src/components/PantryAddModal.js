@@ -33,15 +33,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PantryAddModal(props) {
+  const [inputList, setInputList] = useState([
+    { item: "", Quantity: "", Unit: "" },
+    { item: "", Quantity: "", Unit: "" },
+    { item: "", Quantity: "", Unit: "" },
+    { item: "", Quantity: "", Unit: "" },
+  ]);
+
+  let inputKey = 0;
+
   const classes = useStyles();
 
   const handleChange = () => {
     props.onChange(false);
   };
-
-  const [inputList, setInputList] = useState([
-    { item: "", Quantity: "", Unit: "" },
-  ]);
 
   const handleAddClick = () => {
     setInputList([...inputList, { item: "", Quantity: "", Unit: "" }]);
@@ -63,9 +68,9 @@ function PantryAddModal(props) {
   const handleClick = () => {
     console.log(inputList);
 
-    axios.post("http://localhost:5000/dash/toTest", {
+    /* axios.post("http://localhost:5000/dash/toTest", {
       body: inputList,
-    });
+    }); */
   };
 
   return (
@@ -102,7 +107,6 @@ function PantryAddModal(props) {
                     value={iField.Quantity}
                     onChange={(e) => handleInputChange(e, index)}
                   />
-
                   <Select
                     name="Unit"
                     value={iField.Unit}
@@ -126,7 +130,7 @@ function PantryAddModal(props) {
                       style={{ color: green[500] }}
                     />
                   )}
-                  <div></div>
+                  }
                 </div>
               ))}
               <button onClick={handleClick}>Add to Pantry</button>

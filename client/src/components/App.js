@@ -39,13 +39,13 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {console.log(users)}
+        {console.log(`This is the user store in Context: `, users)}
         <Switch>
           <Route path="/login">
             <Login />
           </Route>
           <Route path="/dashboard">
-            {user.authenticated ? (
+            {users?.authenticated ? (
               <>
                 <Navbar user={user} />
                 <Dashboard />

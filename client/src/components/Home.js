@@ -50,6 +50,7 @@ function Home(props) {
   useEffect(() => {
     // Fetch random recipes from server
     fetchRandomRecipes();
+    console.log(listOfRecipes);
   }, []);
 
   return (
@@ -70,7 +71,7 @@ function Home(props) {
 
           <div style={style.recipeCardHolder}>
             {listOfRecipes.list.map((recipe) => (
-              <RecipeCard key={recipe.recipeId} recipe={recipe} />
+              <RecipeCard key={recipe._id} recipe={recipe} />
             ))}
           </div>
         </div>

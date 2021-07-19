@@ -43,10 +43,10 @@ const scheduler = new ToadScheduler();
 const task = new Task("Get Random recipes", () => {
   const fetchRandom = async () => {
     try {
-      let storeIngredientList: object[] = [];
-      let storeRecipeId: object[] = [];
-      let storeIngAndId: object[] = [];
-      let ingName: String;
+      let storeIngredientList = [];
+      let storeRecipeId = [];
+      let storeIngAndId = [];
+      let ingName;
 
       const objList = await randomRecipes();
       objList.forEach((recipe) => {
@@ -69,14 +69,15 @@ const task = new Task("Get Random recipes", () => {
         randomRecipeModel.create(recordSpecifics(recipe));
       });
     } catch (err) {
-      console.log("Error generated on Server Scheduled Task...");
-      console.error(err);
+      console.log("This error was generated on Server Scheduled Task...");
+      console.log(error.name);
+      console.log(error.message);
     }
   };
   fetchRandom();
 });
 
-scheduler.addSimpleIntervalJob(new SimpleIntervalJob({ seconds: 25 }, task));
+scheduler.addSimpleIntervalJob(new SimpleIntervalJob({ hours: 15 }, task));
 
 /* Get Morgan middleware === "development") {
   app.use(morgan("dev"));
