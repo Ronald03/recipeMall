@@ -5,6 +5,7 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
+import { fallBackImage } from "./constant.js";
 
 const useStyles = makeStyles({
   root: {
@@ -23,7 +24,7 @@ function RecipeCard({ recipe }) {
           component="img"
           alt="Recipe Image"
           height="200"
-          image={recipe.image}
+          image={recipe.image ? recipe.image : fallBackImage}
           title={recipe.title}
         />
 

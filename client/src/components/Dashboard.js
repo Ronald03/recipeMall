@@ -23,7 +23,7 @@ function Dashboard() {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = (value) => {
-    setOpen(value);
+    setOpen(!open);
   };
 
   return (
